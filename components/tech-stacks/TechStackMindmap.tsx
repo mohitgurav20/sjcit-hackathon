@@ -18,6 +18,7 @@ import { TechStack, TechNode, MASTERY_COLORS, MASTERY_LABELS, MasteryLevel } fro
 import { Button } from "@/components/ui/button";
 import { X, Sparkles, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 /* ─── Custom Node Component ──────────────────────────────────────── */
 
@@ -68,62 +69,6 @@ function TechMindmapNode({ data }: { data: CustomNodeData }) {
 }
 
 const nodeTypes = { techNode: TechMindmapNode };
-
-/* ─── Node Detail Panel ──────────────────────────────────────────── */
-
-function NodeDetailPanel({ node, onClose }: { node: TechNode; onClose: () => void }) {
-  const color = MASTERY_COLORS[node.mastery];
-
-  return (
-    <div className="absolute right-4 top-4 z-20 w-80 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-lg border border-[#A79277]/30 rounded-2xl shadow-2xl p-6 animate-in slide-in-from-right-4 fade-in duration-300">
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h3 className="font-bold text-lg text-[#2D3748] dark:text-zinc-100">{node.label}</h3>
-          <p className="text-xs text-[#718096] mt-1">{node.description}</p>
-        </div>
-        <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 shrink-0 -mt-1 -mr-1">
-          <X className="h-4 w-4" />
-        </Button>
-      </div>
-
-      {/* Mastery Badge */}
-      <div className="flex items-center gap-2 mb-5">
-        <div className="h-3 w-3 rounded-full" style={{ backgroundColor: color }} />
-        <span className="text-xs font-bold uppercase tracking-wider" style={{ color }}>
-          {MASTERY_LABELS[node.mastery]}
-        </span>
-      </div>
-
-      {/* DSA Concepts */}
-      {node.dsaConcepts.length > 0 && (
-        <div className="mb-5">
-          <p className="text-xs font-bold uppercase tracking-wider text-[#A79277] mb-3 flex items-center gap-1.5">
-            <Sparkles className="h-3.5 w-3.5" />
-            Related DSA Concepts
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {node.dsaConcepts.map((concept) => (
-              <span
-                key={concept}
-                className="text-xs px-2.5 py-1 rounded-full bg-[#FFF2E1] text-[#A79277] font-medium border border-[#A79277]/20"
-              >
-                {concept}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* CTA */}
-      <Link href="/pairmentor">
-        <Button className="w-full bg-[#A79277] hover:bg-[#8B7A65] text-white shadow-md">
-          <ArrowRight className="mr-2 h-4 w-4" />
-          Start PairMentor Session
-        </Button>
-      </Link>
-    </div>
-  );
-}
 
 /* ─── Layout helpers ─────────────────────────────────────────────── */
 
@@ -218,14 +163,14 @@ export function TechStackMindmap({ stack }: TechStackMindmapProps) {
   const { nodes: initialNodes, edges: initialEdges } = useMemo(() => buildRadialLayout(stack), [stack]);
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, , onEdgesChange] = useEdgesState(initialEdges);
-  const [selectedNode, setSelectedNode] = useState<TechNode | null>(null);
+  const router = useRouter();
 
   const onNodeClick = useCallback((_: React.MouseEvent, node: Node) => {
     const data = node.data as CustomNodeData;
     if (data.techNode) {
-      setSelectedNode(data.techNode);
+      router.push(`/pairmentor?topic=${encodeURIComponent(data.techNode.label)}&stack=${encodeURIComponent(stack.name)}&autoStart=true`);
     }
-  }, []);
+  }, [router, stack.name]);
 
   return (
     <div className="relative w-full h-full rounded-xl overflow-hidden border border-[#A79277]/20 bg-gradient-to-br from-[#FFF2E1]/30 to-white/50">
@@ -256,10 +201,7 @@ export function TechStackMindmap({ stack }: TechStackMindmapProps) {
         />
       </ReactFlow>
 
-      {/* Node Detail Slide-in */}
-      {selectedNode && (
-        <NodeDetailPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
-      )}
+      {/* Node Detail Slide-in (Removed in favor of direct navigation) */}
 
       {/* Legend */}
       <div className="absolute bottom-4 left-4 z-10 flex gap-4 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm px-4 py-2 rounded-full border border-[#A79277]/20 shadow-sm">

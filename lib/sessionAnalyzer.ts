@@ -37,29 +37,29 @@ export interface SessionAnalysis {
 }
 
 const TOPIC_PATTERNS: Record<string, RegExp[]> = {
-  "Binary Search": [/binary\s*search/i, /bisect/i],
-  "Two Pointers": [/two\s*pointer/i, /left.*right.*pointer/i],
+  "Binary Search": [/binary\s*search/i, /bisect/i, /divide\s*and\s*conquer/i],
+  "Two Pointers": [/two\s*pointer/i, /left.*right.*pointer/i, /sliding\s*window/i],
   "Linked Lists": [/linked\s*list/i, /node.*next/i],
-  "Trees & BST": [/binary\s*tree/i, /bst/i, /inorder|preorder|postorder/i],
-  "Dynamic Programming": [/dynamic\s*programming/i, /\bdp\b/i, /memoiz/i],
+  "Trees & BST": [/binary\s*tree/i, /bst/i, /inorder|preorder|postorder/i, /root.*child/i],
+  "Dynamic Programming": [/dynamic\s*programming/i, /\bdp\b/i, /memoiz/i, /tabulation/i],
   "Recursion": [/recursion/i, /recursive/i, /base\s*case/i],
   "Sorting": [/merge\s*sort/i, /quick\s*sort/i, /bubble\s*sort/i, /sorting/i],
-  "Graphs": [/graph/i, /bfs|dfs/i, /dijkstra/i],
-  "Hash Maps": [/hash\s*map/i, /hash\s*table/i, /dictionary/i],
-  "Stacks & Queues": [/\bstack\b/i, /\bqueue\b/i, /fifo|lifo/i],
-  "Arrays": [/\barray\b/i, /subarray/i, /sliding\s*window/i],
-  "Strings": [/palindrome/i, /anagram/i, /substring/i],
-  "System Design": [/system\s*design/i, /scalab/i, /microservice/i],
-  "Time Complexity": [/time\s*complexity/i, /big\s*o/i, /O\(/i],
+  "Graphs": [/graph/i, /bfs|dfs/i, /dijkstra/i, /breadth.*first/i, /depth.*first/i],
+  "Hash Maps": [/hash\s*map/i, /hash\s*table/i, /dictionary/i, /set\b/i],
+  "Stacks & Queues": [/\bstack\b/i, /\bqueue\b/i, /fifo|lifo/i, /pop|push/i],
+  "Arrays": [/\barray\b/i, /subarray/i, /matrix/i, /grid/i],
+  "Strings": [/palindrome/i, /anagram/i, /substring/i, /string/i],
+  "System Design": [/system\s*design/i, /scalab/i, /microservice/i, /database/i, /architecture/i],
+  "Time Complexity": [/time\s*complexity/i, /big\s*o/i, /O\(/i, /space\s*complexity/i],
 };
 
 const TECHNIQUE_PATTERNS: Record<string, RegExp[]> = {
-  "Socratic Method": [/what\s*do\s*you\s*think/i, /how\s*would\s*you/i],
-  "Feynman Technique": [/simple\s*words/i, /explain.*like/i],
-  "Rubber Duck": [/line\s*by\s*line/i, /out\s*loud/i],
-  "Analogy": [/think\s*of\s*it\s*like/i, /imagine/i],
-  "What-If": [/what\s*if/i, /edge\s*case/i],
-  "Error Analysis": [/analyze.*bug/i, /debug/i],
+  "Socratic Method": [/what\s*do\s*you\s*think/i, /how\s*would\s*you/i, /why\s*did\s*you/i, /can\s*you\s*explain/i],
+  "Feynman Technique": [/simple\s*words/i, /explain.*like/i, /break\s*this\s*down/i, /simpler\s*terms/i, /without\s*jargon/i],
+  "Rubber Duck": [/line\s*by\s*line/i, /out\s*loud/i, /walk\s*me\s*through/i, /read\s*your\s*code/i],
+  "Analogy": [/think\s*of\s*it\s*like/i, /imagine/i, /analogy/i, /similar\s*to/i, /like\s*a/i],
+  "What-If": [/what\s*if/i, /edge\s*case/i, /scale/i, /fails/i, /what\s*happens/i],
+  "Error Analysis": [/analyze.*bug/i, /debug/i, /error/i, /trace/i, /wrong/i, /mistake/i],
 };
 
 const POSITIVE = [/exactly|perfect|excellent|great|well\s*done|correct|right|impressive|solid/i, /good\s*(thinking|approach|answer|work)/i];

@@ -13,8 +13,15 @@ const starterCode = `function binarySearch(arr: number[], target: number): numbe
   // TODO: Implement binary search
   return -1;
 }`;
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function PairMentorPage() {
+function PairMentorContent() {
+  const searchParams = useSearchParams();
+  const initialTopic = searchParams.get("topic");
+  const initialStack = searchParams.get("stack");
+  const autoStart = searchParams.get("autoStart") === "true";
+  const sessionStart = searchParams.get("sessionStart");
   const [code, setCode] = useState<string>(starterCode);
   const [showCanvas, setShowCanvas] = useState(false);
   const [showCodeEditor, setShowCodeEditor] = useState(false);
@@ -83,8 +90,11 @@ export default function PairMentorPage() {
     setMentorTask(task);
   }, []);
 
-  const handleConvertLogicToCode = () => {
-    setCode(`function binarySearch(arr: number[], target: number): number {
+  const handleConvertLogicToCode = (generatedCode?: string) => {
+    if (generatedCode) {
+      setCode(generatedCode);
+    } else {
+      setCode(`function binarySearch(arr: number[], target: number): number {
   // 1. Initialize variables / pointers
   let left = 0;
   let right = arr.length - 1;
@@ -111,6 +121,7 @@ export default function PairMentorPage() {
   // 7. Base case / Not found
   return -1;
 }`);
+    }
     setShowCanvas(false);
     setShowCodeEditor(true);
   };
@@ -208,7 +219,6 @@ export default function PairMentorPage() {
         </div>
       )}
 
-      {/* Main Workspace - Voice Hub */}
       <div className="flex-1 rounded-[2rem] border border-[#A79277]/20 bg-white/60 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden relative transition-all duration-500 hover:shadow-[0_20px_40px_rgba(167,146,119,0.1)]">
         <VoiceInterface 
           onTriggerCodeFocus={handleTriggerCodeFocus}
@@ -216,6 +226,10 @@ export default function PairMentorPage() {
           vapiAssistantId="9e0764f1-7314-4c1a-b495-2bc09fa90296" 
           submittedCode={submittedCode}
           onSessionEnd={handleSessionEnd}
+          initialTopic={initialTopic || undefined}
+          initialStack={initialStack || undefined}
+          autoStart={autoStart || !!sessionStart}
+          sessionStart={sessionStart || undefined}
         />
       </div>
 
@@ -295,5 +309,13 @@ export default function PairMentorPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function PairMentorPage() {
+  return (
+    <Suspense fallback={<div className="h-[calc(100vh-4rem)] flex items-center justify-center text-muted-foreground">Loading PairMentor...</div>}>
+      <PairMentorContent />
+    </Suspense>
   );
 }

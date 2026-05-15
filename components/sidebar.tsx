@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Home, MessageSquare, Layers, User, BookOpen, Target } from "lucide-react";
+import { PreviousChats } from "@/components/PreviousChats";
 
 const navItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard" },
@@ -22,7 +23,7 @@ export function Sidebar() {
         <span className="font-bold text-lg text-foreground tracking-tight">MentorForge</span>
       </div>
 
-      <nav className="flex-1 px-4 py-6 space-y-2">
+      <nav className="px-4 py-6 space-y-2 flex-shrink-0">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -43,7 +44,12 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="p-4 border-t">
+      {/* Previous Chats Section */}
+      <div className="flex-1 overflow-hidden flex flex-col border-t border-[#A79277]/10 pt-2">
+        <PreviousChats />
+      </div>
+
+      <div className="p-4 border-t border-[#A79277]/10">
         <Link
           href="/profile"
           className={cn(
